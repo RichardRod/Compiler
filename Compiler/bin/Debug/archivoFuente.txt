@@ -1,0 +1,42 @@
+﻿int global;
+void funcionMagica(int varUno, int varDos, int varTres)
+{
+
+	if(a < b || c <= d)
+	{
+		imprimeUno();
+		imprimeDos();
+		if(x == j && y != z)
+		{
+			reversar();
+			if(magia == magia)
+			{
+
+				exponenciar();
+
+			}
+			else
+			{
+				unaCosa(x, y, z);
+
+				while(a < b || x <= z)
+				{
+					funcionBucle(q, w, e);
+
+					while(w <= 5 && v != r)
+					{
+						anidasazo();
+					}
+				}
+
+			}
+		}
+
+		imprimeTres(a, b, c);
+	}
+}
+
+int factorial(){
+	var = magia();
+	return a;
+}
