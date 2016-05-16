@@ -1,4 +1,12 @@
 ﻿int global;
+
+int funcionPrueba(int a, int b, int c)
+{
+    int localUno, localDos;
+
+}
+
+
 void funcionMagica(int varUno, int varDos, int varTres)
 {
 

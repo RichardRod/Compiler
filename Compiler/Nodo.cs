@@ -12,8 +12,8 @@ namespace Compiler
     protected List<Nodo> hijos = new List<Nodo>();
 
     //atributos semantico
-    private static TablaSimbolos tablaSimbolos;
-    private static string tipoAmbito;
+    public static TablaSimbolos tablaSimbolos;
+    public static string tipoAmbito;
     private char tipoDato;
 
     public char TipoDato
