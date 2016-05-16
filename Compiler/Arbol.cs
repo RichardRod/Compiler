@@ -227,6 +227,13 @@ namespace Compiler
     {
       Console.WriteLine("Valida en DefFunc");
 
+      tipoAmbito = "Local";
+      TipoDato = Tipo.DameTipo(tipo);
+      NombreFuncion = identificador;
+      tablaSimbolos.Agrega(this);
+
+
+
       if (parametros != null)
       {
         parametros.ValidaTipos();
@@ -238,6 +245,11 @@ namespace Compiler
       }//fin de if
 
     }//fin del metodo ValidaTipos
+
+    public Parametros GetParametros()
+    {
+      return parametros as Parametros;
+    }
 
   } //fin de la clase DefinicionFuncion
 
@@ -1089,7 +1101,6 @@ namespace Compiler
 
 
     public LlamadaFuncion(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<LlamadaFunc>";
 
@@ -1109,7 +1120,7 @@ namespace Compiler
       AñadirHijo(new Nodo("("));
       AñadirHijo(argumentos);
       AñadirHijo(new Nodo(")"));
-    }
+    }//fin del constructor
 
     public override void Muestra()
     {
@@ -1122,6 +1133,17 @@ namespace Compiler
 
       Console.WriteLine("<ParentesisFin> " + parentesisFin);
     } //fin del metodo Muestra
+
+    public override void ValidaTipos()
+    {
+      Console.WriteLine("Valida en LlamadaFuncion");
+
+      if (argumentos != null)
+      {
+        argumentos.ValidaTipos();
+      }//fin de if
+    }//fin del metodo ValidaTipos
+
   } //fin de la clase LlamadaFuncion
 
   public class ListaArgumentos : Nodo

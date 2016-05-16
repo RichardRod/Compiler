@@ -51,4 +51,24 @@ namespace Compiler
     } //fin del metodo ExistenErrores
 
   } //fin de la clase Semantico
+
+  public class Tipo
+  {
+      public static char DameTipo(string simbolo)
+      {
+        char tipo = ' ';
+
+        if (simbolo.Equals("int"))
+          tipo =  'i';
+        if (simbolo.Equals("float"))
+          tipo =  'f';
+        if (simbolo.Equals("string"))
+          tipo = 's';
+        if (simbolo.Equals("void"))
+          tipo = 'v';
+
+        return tipo;
+      }//fin del metodo DameTipo
+
+    }//fin de la clase Tipo
 }

@@ -15,11 +15,18 @@ namespace Compiler
     public static TablaSimbolos tablaSimbolos;
     public static string tipoAmbito;
     private char tipoDato;
+    private string nombreFuncion;
 
     public char TipoDato
     {
       get { return tipoDato; }
       set { tipoDato = value; }
+    }
+
+    public string NombreFuncion
+    {
+      get { return nombreFuncion; }
+      set { nombreFuncion = value; }
     }
 
     public List<Nodo> Hijos

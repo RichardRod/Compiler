@@ -1,7 +1,27 @@
 ﻿int varGlobal;
 
-int funcion(int a, int b, int c)
+int MiFuncion(int a, int b, int c)
 {
     int localUno, localDos;
+    print(localUno);
+}
+
+void funcionUno()
+{
+
+}
+
+int Mifuncion(int a, int b, int c)
+{
+
+}
+
+float funcionDos()
+{
+
+}
+
+int funcionTres()
+{
 
 }
