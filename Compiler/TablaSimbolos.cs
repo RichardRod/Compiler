@@ -130,7 +130,7 @@ namespace Compiler
 
       if (FuncionDefinida(funcion.Simbolo))
       {
-        AgregarError("La Funcion: " + funcion.Simbolo + " ya fue definida.");
+        AgregarError("La Funcion: \"" + funcion.Simbolo + "\" ya fue definida.");
         correcto = false;
       }//fin de if
 
@@ -194,7 +194,7 @@ namespace Compiler
       Tipo = tipo;
       Simbolo = simbolo;
       this.ambito = ambito;
-      this.local = (this.Ambito.CompareTo("") != 0);
+      local = Ambito.CompareTo("") != 0;
     } //fin del constructor
 
     public string Ambito

@@ -274,7 +274,11 @@ namespace Compiler
           pila.Push(new Estado(accion));
         } //fin de else if
         if (accion == 0)
+        {
           Console.WriteLine("Error");
+          break;
+        }
+
       } //fin de while
     } //fin del metodo AnalisisSintactico
 
