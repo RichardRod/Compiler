@@ -25,7 +25,7 @@ namespace Compiler
 
   		public void Muestra()
   		{
-
+  		  Console.WriteLine("Muestra en Tabla de simbolos");
   		}//fin del metodo Muestra
 
   		public bool VarGlobalDefinida(string variable)

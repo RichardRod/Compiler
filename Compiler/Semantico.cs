@@ -15,18 +15,17 @@ namespace Compiler
     {
       listaErrores = new List<string>();
       Nodo.tablaSimbolos = tablaSimbolos = new TablaSimbolos(listaErrores);
-    }
+    }//fin del constructor
 
     public void Analiza(Nodo arbol)
     {
       Console.WriteLine("Resultado Analisis Semantico\n");
 
       this.arbol = arbol;
-      //arbol.ValidaTipos();
+      arbol.ValidaTipos();
 
-      //tablaSimbolos.Muestra();
+      tablaSimbolos.Muestra();
       MuestraErrores();
-
 
     } //fin del metodo Analiza
 
