@@ -1,15 +1,18 @@
 ﻿int varGlobal;
+int varGlobal;
+float varReal;
 
 int MiFuncion(int a, int b, int c)
 {
     int localUno, localDos;
+    int localUno;
     float localReal;
     a = b + c;
 }
 
 void funcionUno()
 {
-
+    int x, y, z;
 }
 
 int MiFuncion(int a, int b, int c)

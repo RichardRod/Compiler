@@ -30,27 +30,60 @@ namespace Compiler
 
       if (tabla.Count != 0)
       {
-        Console.WriteLine("Funcion:\t\tTipo:");
-        foreach (ElementoTabla elemento in tabla)
-        {
-          Console.WriteLine(elemento.Simbolo + "\t\t" + elemento.Tipo);
-        }//fin de foreach
-
+        MuestraFunciones();
         Console.WriteLine("\n");
-      }//fin de if
+        MuestraVariables();
+        Console.WriteLine("\n");
+      } //fin de if
       else
       {
         Console.WriteLine("Tabla de simbolos vacia");
-      }//fin de else
+      } //fin de else
     } //fin del metodo Muestra
 
-    public bool VarGlobalDefinida(string variable)
+    private void MuestraFunciones()
+    {
+      Console.WriteLine("Funcion:\t\tTipo:");
+
+      foreach (ElementoTabla elemento in tabla)
+      {
+        if(elemento.EsFuncion())
+          Console.WriteLine(elemento.Simbolo + "\t\t" + elemento.Tipo);
+      } //fin de foreach
+    } //fin del metodo MuestraFunciones
+
+    private void MuestraVariables()
+    {
+      Console.WriteLine("Variable:\t\tTipo:\t\tAmbito:");
+
+      foreach (ElementoTabla elemento in tabla)
+      {
+        if(elemento.EsVariable())
+          Console.WriteLine(elemento.Simbolo + "\t\t" + elemento.Tipo + "\t\t" + ((Variable)elemento).Ambito);
+      }//fin de foreach
+    }//fin del metodo MuestraVariables
+
+    public bool VariableLocalDefinida(string variable)
+    {
+      foreach (ElementoTabla elemento in tabla)
+      {
+        if (elemento.EsVariable() && elemento.EsVarLocal())
+        {
+          if (elemento.Simbolo == variable)
+            return true;
+        } //fin de if
+      } //fin de foreach
+
+      return false;
+    } //fin del metodo VariableLocalDefinida
+
+    public bool VariableGlobalDefinida(string variable)
     {
       foreach (ElementoTabla elemento in tabla)
       {
         if (elemento.EsVariable() && !elemento.EsVarLocal())
         {
-          if (elemento.Simbolo.CompareTo(variable) == 0)
+          if(elemento.Simbolo == variable)
             return true;
         }
       } //fin de foreach
@@ -69,22 +102,7 @@ namespace Compiler
         }
       } //fin de foreach
       return false;
-    }//fin del metodo FuncionDefinida
-
-    public bool VarLocalDefinida(string variable, string funcion)
-    {
-      foreach (ElementoTabla elemento in tabla)
-      {
-        if (elemento.EsVariable() && elemento.EsVarLocal())
-        {
-          if (((Variable) elemento).Ambito.CompareTo(funcion) == 0 && elemento.Simbolo.CompareTo(variable) == 0)
-            return true;
-        }
-      } //fin de foreach
-
-
-      return false;
-    }
+    } //fin del metodo FuncionDefinida
 
     public void BuscaIdentificador(string simbolo)
     {
@@ -113,14 +131,23 @@ namespace Compiler
     {
       Console.WriteLine("Agregando Error: " + error);
       listaErrores.Add(error);
-    }//fin del metodo AgregarError
+    } //fin del metodo AgregarError
 
     public void Agrega(DefVar defVar)
     {
-      bool correcto = false;
+      bool correcto = true;
 
+      Variable variable = new Variable(defVar.TipoDato, defVar.Identificador, defVar.Ambito);
 
-    }//fin del metodo Agrega
+      if (VariableLocalDefinida(variable.Simbolo) || VariableGlobalDefinida(variable.Simbolo))
+      {
+        AgregarError("La Variable: \"" + variable.Simbolo + "\" ya fue definida");
+        correcto = false;
+      }
+
+      if (correcto)
+        Agrega(variable);
+    } //fin del metodo Agrega
 
     public void Agrega(DefFunc defFunc)
     {
@@ -132,12 +159,11 @@ namespace Compiler
       {
         AgregarError("La Funcion: \"" + funcion.Simbolo + "\" ya fue definida.");
         correcto = false;
-      }//fin de if
+      } //fin de if
 
-      if(correcto)
+      if (correcto)
         Agrega(funcion);
-
-    }//fin del metodo Agrega
+    } //fin del metodo Agrega
 
     public void Agrega(Parametros parametros)
     {
@@ -194,7 +220,10 @@ namespace Compiler
       Tipo = tipo;
       Simbolo = simbolo;
       this.ambito = ambito;
-      local = Ambito.CompareTo("") != 0;
+      if (ambito == "Local")
+        local = true;
+      else
+        local = false;
     } //fin del constructor
 
     public string Ambito
@@ -234,7 +263,7 @@ namespace Compiler
       Simbolo = simbolo;
       Tipo = tipo;
       this.parametros = parametros;
-    }//fin del constructor
+    } //fin del constructor
 
     public Parametros Parametros
     {
@@ -252,10 +281,10 @@ namespace Compiler
           {
             parametrosCadena += (parametro.Hijos[0].simbolo + " "); //tipo del parametro
             parametrosCadena += parametro.Hijos[1].simbolo + " "; //identificador del parametro
-          }//fin de foreach
+          } //fin de foreach
 
           parametrosCadena = parametrosCadena.Substring(0, parametrosCadena.Length - 2);
-        }//fin de if
+        } //fin de if
 
         return parametrosCadena;
       }

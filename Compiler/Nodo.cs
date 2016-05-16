@@ -13,7 +13,7 @@ namespace Compiler
 
     //atributos semantico
     public static TablaSimbolos tablaSimbolos;
-    public static string tipoAmbito;
+    public static string tipoAmbito = "Global";
     private char tipoDato;
     private string nombreFuncion;
 

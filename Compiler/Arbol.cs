@@ -173,12 +173,14 @@ namespace Compiler
   {
     //atributos
     private string identificador;
+    private string ambito;
 
     //constructor
     public DefVar(string tipo, string identificador)
     {
       TipoDato = Tipo.DameTipo(tipo);
       this.identificador = identificador;
+      ambito = tipoAmbito;
 
     }//fin del constructor
 
@@ -187,9 +189,14 @@ namespace Compiler
       get { return identificador; }
     }
 
+    public string Ambito
+    {
+      get { return ambito; }
+    }
+
     public override void ValidaTipos()
     {
-      Console.WriteLine("Agregando Variable: " + identificador + " Tipo: " + TipoDato);
+      Console.WriteLine("Agregando Variable: " + identificador + " Tipo: " + TipoDato + " Ambito: " + tipoAmbito);
       tablaSimbolos.Agrega(this);
     }//fin del metodo VaidaTipos
 
@@ -1337,7 +1344,6 @@ namespace Compiler
     Nodo defLocal;
 
     public DefinicionesLocales(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<DefLocales>";
 
@@ -1375,6 +1381,8 @@ namespace Compiler
     {
       Console.WriteLine("Valida en DefinicionesLocales");
 
+      tipoAmbito = "Local";
+
       if (defLocal != null)
       {
         defLocal.ValidaTipos();
@@ -1384,6 +1392,8 @@ namespace Compiler
       {
         defLocales.ValidaTipos();
       }//fin de if
+
+      tipoAmbito = "Global";
     }//fin del metodo ValidaTipos
 
   } //fin de la clase DefinicionesLocales
