@@ -13,7 +13,7 @@ namespace Compiler
     private Stack<ElementoPila> pila;
     private NoTerminal nt;
     private Nodo nodo;
-    private Nodo arbolSintactico;
+    private Nodo arbol;
     private bool aceptacion = false;
 
     int[] idReglas = new int[52];
@@ -21,13 +21,17 @@ namespace Compiler
     String[] strReglas = new string[52];
     private int[,] tabla = new int[95, 46];
 
+    private Semantico _semantico;
+
     public Sintactico(String entrada)
     {
       this.entrada = entrada;
       lexico = new Lexico(entrada);
       pila = new Stack<ElementoPila>();
-      arbolSintactico = null;
+      arbol = null;
       CargarArchivos();
+
+      _semantico = new Semantico();
     } //fin del constructor
 
     public String Entrada
@@ -66,11 +70,17 @@ namespace Compiler
           {
             aceptacion = true;
             pila.Pop();
-            arbolSintactico = (pila.Pop().Nodo);
+            arbol = pila.Pop().Nodo; //<Programa>
             Console.WriteLine("Aceptacion");
+            Console.WriteLine("\n\n");
 
             if (aceptacion)
-              arbolSintactico.Muestra();
+            {
+              arbol.Muestra();
+              Console.WriteLine("\n\n");
+              _semantico.Analiza(arbol);
+            }//fin de if
+
             break;
           } //fin de if
 

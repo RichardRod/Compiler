@@ -26,6 +26,8 @@ void funcionMagica(int varUno, int varDos, int varTres)
 					while(w <= 5 && v != r)
 					{
 						anidasazo();
+						a = b + c + d;
+
 					}
 				}
 
