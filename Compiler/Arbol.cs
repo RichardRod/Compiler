@@ -1067,7 +1067,6 @@ namespace Compiler
     private List<Nodo> listaParametros;
 
     public Parametros(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<ListaParam>";
 
@@ -1101,8 +1100,25 @@ namespace Compiler
     public override void ValidaTipos()
     {
       Console.WriteLine("Valida en Parametros");
-    }
-  }
+
+      DefVar variable = new DefVar(tipo, identificador);
+
+      if(variable != null)
+        variable.ValidaTipos();
+
+      foreach (Nodo parametro in listaParametros)
+      {
+        string tipoParametro = parametro.Hijos[0].simbolo;
+        string identificadorParametro = parametro.Hijos[1].simbolo;
+
+        DefVar variableParametro = new DefVar(tipoParametro, identificadorParametro);
+        if(variableParametro != null)
+          variableParametro.ValidaTipos();
+      }
+
+
+    }//fin del metodo ValidaTipos
+  }//fin de la clase ValidaTipos
 
   public class Parametros2 : Nodo
   {
