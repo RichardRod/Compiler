@@ -3,7 +3,8 @@
 int MiFuncion(int a, int b, int c)
 {
     int localUno, localDos;
-    print(localUno);
+    float localReal;
+    a = b + c;
 }
 
 void funcionUno()
@@ -11,7 +12,12 @@ void funcionUno()
 
 }
 
-int Mifuncion(int a, int b, int c)
+int MiFuncion(int a, int b, int c)
+{
+
+}
+
+int funcionUno()
 {
 
 }

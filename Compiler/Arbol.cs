@@ -151,8 +151,49 @@ namespace Compiler
     public override void ValidaTipos()
     {
       Console.WriteLine("Valida en Variables");
-    }
+
+      DefVar variable = new DefVar(tipo, identificador);
+
+      if(variable != null)
+        variable.ValidaTipos();
+
+      for (int i = 0; i < listaVariables.Count; i++)
+      {
+        DefVar definicionVariable = new DefVar(tipo, listaVariables[i].Hijos[0].simbolo);
+
+        if(definicionVariable != null)
+          definicionVariable.ValidaTipos();
+
+      }//fin de for
+    }//fin del metodo Valida Tipos
+
   } //fin de la clase Variables
+
+  public class DefVar : Nodo
+  {
+    //atributos
+    private string identificador;
+
+    //constructor
+    public DefVar(string tipo, string identificador)
+    {
+      TipoDato = Tipo.DameTipo(tipo);
+      this.identificador = identificador;
+
+    }//fin del constructor
+
+    public string Identificador
+    {
+      get { return identificador; }
+    }
+
+    public override void ValidaTipos()
+    {
+      Console.WriteLine("Agregando Variable: " + identificador + " Tipo: " + TipoDato);
+      tablaSimbolos.Agrega(this);
+    }//fin del metodo VaidaTipos
+
+  }//fin de la clase DefVar
 
   //R5 <Definicion> ::= <DefFunc>
   public class DefFunc : Nodo
@@ -232,8 +273,6 @@ namespace Compiler
       NombreFuncion = identificador;
       tablaSimbolos.Agrega(this);
 
-
-
       if (parametros != null)
       {
         parametros.ValidaTipos();
@@ -285,6 +324,8 @@ namespace Compiler
     public override void ValidaTipos()
     {
       Console.WriteLine("Valida en Identificador");
+
+
     }//fin del metodo ValidaTipos
 
   } //fin de la clase Identificador
@@ -386,7 +427,6 @@ namespace Compiler
     private Nodo expresionIzquierda;
 
     public ExpresionOperadoresBinarios(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<Expresion>";
 
@@ -426,6 +466,18 @@ namespace Compiler
     public override void ValidaTipos()
     {
       Console.WriteLine("Valida en ExpresionesOperadoresBinarios");
+
+      if (expresionIzquierda != null)
+      {
+        expresionIzquierda.ValidaTipos();
+      }
+
+      if (expresionDerecha != null)
+      {
+        expresionDerecha.ValidaTipos();
+      }
+
+
     }//fin del metodo Valida
   } //fin de la clase ExpresionOperadoresBinarios
 
@@ -629,7 +681,6 @@ namespace Compiler
     Nodo sentencia;
 
     public Sentencias(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<Sentencias>";
 
@@ -659,6 +710,21 @@ namespace Compiler
         sentencia.Muestra();
       } //fin de if
     } //fin del metodo Muestra
+
+    public override void ValidaTipos()
+    {
+      Console.WriteLine("Valida en Sentencias");
+
+      if (sentencias != null)
+      {
+        sentencias.ValidaTipos();
+      }
+
+      if (sentencia != null)
+      {
+        sentencia.ValidaTipos();
+      }
+    }
   } //fin de la clase Sentencias
 
   public class SentenciaAsignacion : Nodo
@@ -714,6 +780,16 @@ namespace Compiler
       MuestraSangria();
       Console.WriteLine("<PuntoComa> " + puntoComa);
     } //fin del metodo Muestra
+
+    public override void ValidaTipos()
+    {
+      Console.WriteLine("Valida en SentenciaAsignacion");
+
+      if (expresion != null)
+      {
+        expresion.ValidaTipos();
+      }
+    }//fin del metodo ValidaTipos
   } //fin de la clase SentenciaAsignacion
 
   public class SentenciaLlamadaFuncion : Nodo
@@ -1055,7 +1131,6 @@ namespace Compiler
     private string llaveFin;
 
     public BloqueFunc(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<BloqueFunc>";
 
@@ -1089,7 +1164,17 @@ namespace Compiler
       sangria--;
       MuestraSangria();
       Console.WriteLine("<LlaveFin> " + llaveFin);
-    }
+    }//fin del metodo Muestra
+
+    public override void ValidaTipos()
+    {
+      Console.WriteLine("Valida en BloqueFunc");
+
+      if (defLocales != null)
+      {
+        defLocales.ValidaTipos();
+      }
+    }//fin del metodo ValidaTipos
   } //fin de la clase BloqueFuncion
 
   public class LlamadaFuncion : Nodo

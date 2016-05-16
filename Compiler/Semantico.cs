@@ -42,6 +42,8 @@ namespace Compiler
       else
       {
         Console.WriteLine("Sin errores Semanticos");
+        //proceder a la generacion de codigo
+
       } //fin de else
     } //fin del metodo MuestraErrores
 

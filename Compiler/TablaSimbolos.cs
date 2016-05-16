@@ -34,12 +34,14 @@ namespace Compiler
         foreach (ElementoTabla elemento in tabla)
         {
           Console.WriteLine(elemento.Simbolo + "\t\t" + elemento.Tipo);
-        }
-      }
+        }//fin de foreach
+
+        Console.WriteLine("\n");
+      }//fin de if
       else
       {
         Console.WriteLine("Tabla de simbolos vacia");
-      }
+      }//fin de else
     } //fin del metodo Muestra
 
     public bool VarGlobalDefinida(string variable)
@@ -62,12 +64,12 @@ namespace Compiler
       {
         if (elemento.EsFuncion())
         {
-          if (elemento.Simbolo.CompareTo(funcion) == 0)
+          if (simbolo == elemento.Simbolo)
             return true;
         }
       } //fin de foreach
       return false;
-    }
+    }//fin del metodo FuncionDefinida
 
     public bool VarLocalDefinida(string variable, string funcion)
     {
@@ -107,30 +109,18 @@ namespace Compiler
       } //fin de foreach
     }
 
-    public bool BuscaFuncion(string identificador)
-    {
-      varGlobal = null;
-      varLocal = null;
-      funcion = null;
-
-      var identificadoresEncontrados = tabla.FindAll(e => ((e.Simbolo == identificador) && e.EsFuncion()));
-
-      if (identificadoresEncontrados.Count == 1)
-        funcion = (Funcion) identificadoresEncontrados[0];
-
-      return identificadoresEncontrados.Count != 1 ? false : true;
-
-    }//fin del metodo BuscaFuncion
-
     public void AgregarError(String error)
     {
       Console.WriteLine("Agregando Error: " + error);
       listaErrores.Add(error);
     }//fin del metodo AgregarError
 
-    public void Agrega(Variables defVar)
+    public void Agrega(DefVar defVar)
     {
-    }
+      bool correcto = false;
+
+
+    }//fin del metodo Agrega
 
     public void Agrega(DefFunc defFunc)
     {
@@ -138,13 +128,11 @@ namespace Compiler
 
       Funcion funcion = new Funcion(defFunc.TipoDato, defFunc.NombreFuncion, defFunc.GetParametros());
 
-      //Console.WriteLine(funcion.Tipo + " " + funcion.Simbolo);
-
-      if (BuscaFuncion(funcion.Simbolo))
+      if (FuncionDefinida(funcion.Simbolo))
       {
         AgregarError("La Funcion: " + funcion.Simbolo + " ya fue definida.");
         correcto = false;
-      }
+      }//fin de if
 
       if(correcto)
         Agrega(funcion);
@@ -203,8 +191,8 @@ namespace Compiler
     //constructor
     public Variable(char tipo, string simbolo, string ambito)
     {
-      this.Tipo = tipo;
-      this.Simbolo = simbolo;
+      Tipo = tipo;
+      Simbolo = simbolo;
       this.ambito = ambito;
       this.local = (this.Ambito.CompareTo("") != 0);
     } //fin del constructor
