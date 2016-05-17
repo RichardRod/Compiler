@@ -1,37 +1,9 @@
 ﻿int varGlobal;
-int varGlobal;
-float varReal;
-
-int MiFuncion(int a, int b, int c)
-{
-    int localUno, localDos;
-    int localUno;
-    int b;
-    float localReal;
-    a = b + c;
-}
-
-void funcionUno()
-{
-    int x, y, z;
-}
 
 int MiFuncion()
 {
 
-}
-
-int funcionUno()
-{
+    a = asigna();
 
 }
 
-float funcionDos()
-{
-
-}
-
-int funcionTres()
-{
-
-}

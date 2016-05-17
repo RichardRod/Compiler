@@ -36,7 +36,7 @@ namespace Compiler
       {
         definiciones.ValidaTipos();
       }
-    }//fin del metodo ValidaTipos
+    } //fin del metodo ValidaTipos
   } //fin de la clase Programa
 
   //R2 <Definiciones> ::= \e
@@ -75,7 +75,6 @@ namespace Compiler
         Console.WriteLine("<Definiciones>");
         definiciones.Muestra();
       } //fin de if
-
     } //fin del metodo Muestra
 
     public override void ValidaTipos()
@@ -85,14 +84,13 @@ namespace Compiler
       if (definicion != null)
       {
         definicion.ValidaTipos();
-      }//fin de if
+      } //fin de if
 
       if (definiciones != null)
       {
         definiciones.ValidaTipos();
-      }//fin de if
-    }//fin del metodo ValidaTipos
-
+      } //fin de if
+    } //fin del metodo ValidaTipos
   } //fin de la clase Definiciones
 
   //R4 <Definicion> ::= <DefVar>
@@ -154,19 +152,17 @@ namespace Compiler
 
       DefVar variable = new DefVar(tipo, identificador);
 
-      if(variable != null)
+      if (variable != null)
         variable.ValidaTipos();
 
       for (int i = 0; i < listaVariables.Count; i++)
       {
         DefVar definicionVariable = new DefVar(tipo, listaVariables[i].Hijos[0].simbolo);
 
-        if(definicionVariable != null)
+        if (definicionVariable != null)
           definicionVariable.ValidaTipos();
-
-      }//fin de for
-    }//fin del metodo Valida Tipos
-
+      } //fin de for
+    } //fin del metodo Valida Tipos
   } //fin de la clase Variables
 
   public class DefVar : Nodo
@@ -181,8 +177,7 @@ namespace Compiler
       TipoDato = Tipo.DameTipo(tipo);
       this.identificador = identificador;
       ambito = tipoAmbito;
-
-    }//fin del constructor
+    } //fin del constructor
 
     public string Identificador
     {
@@ -198,9 +193,8 @@ namespace Compiler
     {
       Console.WriteLine("Agregando Variable: " + identificador + " Tipo: " + TipoDato + " Ambito: " + tipoAmbito);
       tablaSimbolos.Agrega(this);
-    }//fin del metodo VaidaTipos
-
-  }//fin de la clase DefVar
+    } //fin del metodo VaidaTipos
+  } //fin de la clase DefVar
 
   //R5 <Definicion> ::= <DefFunc>
   public class DefFunc : Nodo
@@ -283,20 +277,18 @@ namespace Compiler
       if (parametros != null)
       {
         parametros.ValidaTipos();
-      }//fin de if
+      } //fin de if
 
       if (bloqueFunc != null)
       {
         bloqueFunc.ValidaTipos();
-      }//fin de if
-
-    }//fin del metodo ValidaTipos
+      } //fin de if
+    } //fin del metodo ValidaTipos
 
     public Parametros GetParametros()
     {
       return parametros as Parametros;
     }
-
   } //fin de la clase DefinicionFuncion
 
   public class NodoVariableSimple : Nodo
@@ -320,21 +312,18 @@ namespace Compiler
     public Identificador(Stack<ElementoPila> pila)
       : base(pila)
     {
-    }//fin del constructor
+    } //fin del constructor
 
     public override void Muestra()
     {
       Console.Write("<Identificador> ");
       base.Muestra();
-    }//fin del metodo Muestra
+    } //fin del metodo Muestra
 
     public override void ValidaTipos()
     {
       Console.WriteLine("Valida en Identificador");
-
-
-    }//fin del metodo ValidaTipos
-
+    } //fin del metodo ValidaTipos
   } //fin de la clase Identificador
 
   //R37 <Termino> ::= entero
@@ -349,14 +338,13 @@ namespace Compiler
     {
       Console.Write("<Entero> ");
       base.Muestra();
-    }//fin del metodo Muestra
+    } //fin del metodo Muestra
 
     public override void ValidaTipos()
     {
       TipoDato = 'i';
       Console.WriteLine("Valida en Entero");
-    }//fin del metodo ValidaTipos
-
+    } //fin del metodo ValidaTipos
   } //fin de la clase Entero
 
   public class Real : NodoVariableSimple
@@ -376,8 +364,7 @@ namespace Compiler
     {
       TipoDato = 'f';
       Console.WriteLine("Valida en Real");
-    }//fin del metodo ValidaTipos
-
+    } //fin del metodo ValidaTipos
   } //fin de la clase Real
 
   public class Cadena : NodoVariableSimple
@@ -483,9 +470,7 @@ namespace Compiler
       {
         expresionDerecha.ValidaTipos();
       }
-
-
-    }//fin del metodo Valida
+    } //fin del metodo Valida
   } //fin de la clase ExpresionOperadoresBinarios
 
 
@@ -743,7 +728,6 @@ namespace Compiler
     String puntoComa;
 
     public SentenciaAsignacion(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<Sentencia>";
 
@@ -796,7 +780,7 @@ namespace Compiler
       {
         expresion.ValidaTipos();
       }
-    }//fin del metodo ValidaTipos
+    } //fin del metodo ValidaTipos
   } //fin de la clase SentenciaAsignacion
 
   public class SentenciaLlamadaFuncion : Nodo
@@ -806,7 +790,6 @@ namespace Compiler
 
     //constructor
     public SentenciaLlamadaFuncion(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<Sentencia>";
 
@@ -819,7 +802,7 @@ namespace Compiler
 
     public override void Muestra()
     {
-      Console.WriteLine("<LlamadaFuncion>");
+      Console.WriteLine("<SentenciaLlamadaFuncion>");
       if (llamadaFuncion != null)
       {
         llamadaFuncion.Muestra();
@@ -827,6 +810,11 @@ namespace Compiler
 
       Console.WriteLine("<PuntoComa> " + puntoComa);
     } //fin del metodo Muestra
+
+    public override void ValidaTipos()
+    {
+      Console.WriteLine("Valida en SentenciaLlamadaFuncion");
+    }
   } //fin de la clase SentenciaLlamadaFuncion
 
   public class SentenciaValorRegresa : Nodo
@@ -867,6 +855,11 @@ namespace Compiler
       }
       Console.WriteLine("<PuntoComa> " + puntoComa);
     } //fin del metodo Muestra
+
+    public override void ValidaTipos()
+    {
+      Console.WriteLine("Valida en SentenciaLlamadaFuncion");
+    }
   } //fin de la clase SentenciaValorRegresa
 
   public class SentenciaIf : Nodo
@@ -935,8 +928,7 @@ namespace Compiler
     public override void ValidaTipos()
     {
       Console.WriteLine("Valida en SentenciasIf");
-    }//fin del metodo ValidaTipos
-
+    } //fin del metodo ValidaTipos
   } //fin de la clase SentenciaIf
 
   public class SentenciaWhile : Nodo
@@ -1103,7 +1095,7 @@ namespace Compiler
 
       DefVar variable = new DefVar(tipo, identificador);
 
-      if(variable != null)
+      if (variable != null)
         variable.ValidaTipos();
 
       foreach (Nodo parametro in listaParametros)
@@ -1112,13 +1104,11 @@ namespace Compiler
         string identificadorParametro = parametro.Hijos[1].simbolo;
 
         DefVar variableParametro = new DefVar(tipoParametro, identificadorParametro);
-        if(variableParametro != null)
+        if (variableParametro != null)
           variableParametro.ValidaTipos();
-      }
-
-
-    }//fin del metodo ValidaTipos
-  }//fin de la clase ValidaTipos
+      } //fin de foreach
+    } //fin del metodo ValidaTipos
+  } //fin de la clase ValidaTipos
 
   public class Parametros2 : Nodo
   {
@@ -1187,7 +1177,7 @@ namespace Compiler
       sangria--;
       MuestraSangria();
       Console.WriteLine("<LlaveFin> " + llaveFin);
-    }//fin del metodo Muestra
+    } //fin del metodo Muestra
 
     public override void ValidaTipos()
     {
@@ -1197,7 +1187,7 @@ namespace Compiler
       {
         defLocales.ValidaTipos();
       }
-    }//fin del metodo ValidaTipos
+    } //fin del metodo ValidaTipos
   } //fin de la clase BloqueFuncion
 
   public class LlamadaFuncion : Nodo
@@ -1228,7 +1218,7 @@ namespace Compiler
       AñadirHijo(new Nodo("("));
       AñadirHijo(argumentos);
       AñadirHijo(new Nodo(")"));
-    }//fin del constructor
+    } //fin del constructor
 
     public override void Muestra()
     {
@@ -1246,12 +1236,17 @@ namespace Compiler
     {
       Console.WriteLine("Valida en LlamadaFuncion");
 
+      bool existeFuncion = tablaSimbolos.FuncionDefinida(identificador);
+
+      if (!existeFuncion)
+        tablaSimbolos.AgregarError("No existe la funcion: \"" + identificador + "\".");
+
       if (argumentos != null)
       {
         argumentos.ValidaTipos();
-      }//fin de if
-    }//fin del metodo ValidaTipos
+      } //fin de if
 
+    } //fin del metodo ValidaTipos
   } //fin de la clase LlamadaFuncion
 
   public class ListaArgumentos : Nodo
@@ -1261,7 +1256,6 @@ namespace Compiler
     private Nodo expresion;
 
     public ListaArgumentos(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<ListaArgumentos>";
 
@@ -1307,8 +1301,7 @@ namespace Compiler
       {
         expresion.ValidaTipos();
       }
-    }//fin del metodo ValidaTipos
-
+    } //fin del metodo ValidaTipos
   } //fin de la clase ListaArgumentos
 
   public class ListaArgumentos2 : Nodo
@@ -1402,16 +1395,15 @@ namespace Compiler
       if (defLocal != null)
       {
         defLocal.ValidaTipos();
-      }//fin de if
+      } //fin de if
 
       if (defLocales != null)
       {
         defLocales.ValidaTipos();
-      }//fin de if
+      } //fin de if
 
       tipoAmbito = "Global";
-    }//fin del metodo ValidaTipos
-
+    } //fin del metodo ValidaTipos
   } //fin de la clase DefinicionesLocales
 }
 
