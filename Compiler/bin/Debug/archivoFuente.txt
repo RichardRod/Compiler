@@ -3,7 +3,9 @@
 int MiFuncion()
 {
 
-    a = asigna();
+    a = asigna(x, y, z);
+
+    return a;
 
 }
 

@@ -825,7 +825,6 @@ namespace Compiler
     //public Nodo valorRegresa;
 
     public SentenciaValorRegresa(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<Sentencia>";
 
@@ -858,8 +857,15 @@ namespace Compiler
 
     public override void ValidaTipos()
     {
-      Console.WriteLine("Valida en SentenciaLlamadaFuncion");
-    }
+      Console.WriteLine("Valida en ValorRegresa");
+
+      if (nodoSiguiente != null)
+      {
+        nodoSiguiente.ValidaTipos();
+      }
+
+
+    }//fin del metodo ValidaTipos
   } //fin de la clase SentenciaValorRegresa
 
   public class SentenciaIf : Nodo
@@ -940,7 +946,6 @@ namespace Compiler
     private Nodo bloque;
 
     public SentenciaWhile(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<Sentencia>";
 
@@ -984,7 +989,6 @@ namespace Compiler
     private String llaveFin;
 
     public Bloque(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<Bloque>";
 
@@ -1023,7 +1027,6 @@ namespace Compiler
     Nodo bloque;
 
     public Otro(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<Otro>";
 
@@ -1049,7 +1052,6 @@ namespace Compiler
       } //fin de if
     } //fin del metodo Muestra
   } //fin de la clase Otro
-
 
   public class Parametros : Nodo
   {
@@ -1113,7 +1115,6 @@ namespace Compiler
   public class Parametros2 : Nodo
   {
     public Parametros2(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<ListaParam>";
 
@@ -1134,6 +1135,11 @@ namespace Compiler
 
       for (int i = listaVariables.Count - 1; i >= 0; i--)
         AñadirHijo(listaVariables[i]);
+    }
+
+    public override void Muestra()
+    {
+      Console.WriteLine("Muestra en parametros2");
     }
   }
 
@@ -1343,6 +1349,11 @@ namespace Compiler
         listaArgumentos.Muestra();
       }
     } //fin del metodo Muestra
+
+    public override void ValidaTipos()
+    {
+      Console.WriteLine("Valida en ListaDeArgumentos2");
+    }
   } //fin de la clase
 
 
