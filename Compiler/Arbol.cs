@@ -305,6 +305,49 @@ namespace Compiler
     {
       Console.WriteLine(simbolo);
     } //fin del metodo Muestra
+
+    public override void ValidaTipos()
+    {
+      Console.WriteLine("Valida en Nodo Variable simple");
+      Console.WriteLine("Obteniendo Tipo: " + simbolo);
+
+      Variable miVariable = tablaSimbolos.ObtenerVariable(simbolo);
+      char tipoVariable = ' ';
+
+      if (miVariable != null)
+      {
+        Console.WriteLine("Variable existente: ");
+        Console.WriteLine("Tipo: " + miVariable.Tipo);
+        tipoVariable = miVariable.Tipo;
+
+        listaExpresion.Add(miVariable);
+      }
+      else
+      {
+        tablaSimbolos.AgregarError("Variable indefinida: \"" + simbolo + "\"");
+      }
+    }
+
+    public override char ObtenerTipo()
+    {
+      //Console.WriteLine("Obteniendo Tipo: " + simbolo);
+
+      Variable miVariable = tablaSimbolos.ObtenerVariable(simbolo);
+      char tipoVariable = ' ';
+
+      if (miVariable != null)
+      {
+        Console.WriteLine("Variable existente: ");
+        Console.WriteLine("Tipo: " + miVariable.Tipo);
+        tipoVariable = miVariable.Tipo;
+      }
+      else
+      {
+        tablaSimbolos.AgregarError("Variable indefinida: \"" + simbolo + "\"");
+      }
+
+      return tipoVariable;
+    }
   } //fin de la clase NodoVariableSimple
 
   //R36 <Termino> ::= identificador
@@ -324,7 +367,15 @@ namespace Compiler
     public override void ValidaTipos()
     {
       Console.WriteLine("Valida en Identificador");
+      base.ValidaTipos();
+      //Console.WriteLine("VALIDA que este declarado: " + );
     } //fin del metodo ValidaTipos
+
+    public override char ObtenerTipo()
+    {
+      Console.WriteLine("Obteniendo en: Identificador");
+      return base.ObtenerTipo();
+    } //fin del metodo ObtenerTipo
   } //fin de la clase Identificador
 
   //R37 <Termino> ::= entero
@@ -447,8 +498,10 @@ namespace Compiler
         MuestraSangria();
         expresionIzquierda.Muestra();
       } //fin de if
+
       Console.WriteLine("<Operador> " + operador);
       Console.WriteLine("<ExpresionDerecha>");
+
       if (expresionDerecha != null)
       {
         sangria++;
@@ -464,18 +517,46 @@ namespace Compiler
       if (expresionIzquierda != null)
       {
         expresionIzquierda.ValidaTipos();
+        expresionIzquierda.ObtenerTipo();
       }
 
       if (expresionDerecha != null)
       {
         expresionDerecha.ValidaTipos();
+        expresionDerecha.ObtenerTipo();
       }
+
+      //valida expresion
+      List<Variable> listaAuxiliar = new List<Variable>(listaExpresion);
+      foreach (Variable variable in listaExpresion)
+      {
+        Variable aux = variable;
+        Console.WriteLine(variable.Simbolo);
+      }//fin de foreach
+
+      Console.WriteLine("_____________________");
+
+      listaAuxiliar.Reverse();
+      for (int i = 0; i < listaAuxiliar.Count; i++)
+      {
+        if (listaAuxiliar[i].Tipo != listaExpresion[i].Tipo)
+        {
+          tablaSimbolos.AgregarError("No puede formarse la expresion Tipo Requerido: \"" + listaAuxiliar[i].Tipo + "\"");
+          break;
+        }
+        //Console.WriteLine(listaAuxiliar[i].Simbolo + " - " + listaExpresion[i].Simbolo);
+      }
+
     } //fin del metodo Valida
   } //fin de la clase ExpresionOperadoresBinarios
 
 
   public class OperadorAdicion : ExpresionOperadoresBinarios
   {
+    //atributos
+    private Nodo simboloIzquierda;
+    private Nodo simboloDerecha;
+
     //constructor
     public OperadorAdicion(Stack<ElementoPila> pila)
       : base(pila)
@@ -485,20 +566,46 @@ namespace Compiler
     public override void Muestra()
     {
       base.Muestra();
-      Nodo simboloIzquierda = hijos[0].Hijos[0].Hijos[0];
-      Nodo simboloDerecha = hijos[0].Hijos[1].Hijos[0];
+
+      simboloIzquierda = hijos[0].Hijos[0].Hijos[0];
+      simboloDerecha = hijos[0].Hijos[1].Hijos[0];
       sangria++;
+
       MuestraSangria();
       simboloIzquierda.Muestra();
       sangria++;
+
       MuestraSangria();
       simboloDerecha.Muestra();
     } //fin del metodo Muestra
+
+    public override void ValidaTipos()
+    {
+      Console.WriteLine("Valida en Operador Adicion: " + simboloIzquierda + " " + simboloDerecha);
+
+      base.ValidaTipos();
+
+      if (simboloIzquierda != null)
+      {
+        Console.WriteLine("Entre izquierda");
+        simboloIzquierda.ValidaTipos();
+      }
+
+      if (simboloDerecha != null)
+      {
+        Console.WriteLine("Entre derecha");
+        simboloDerecha.ValidaTipos();
+      }
+    } //fin del metodo ValidaTipos
   } //fin de la clase OperadorAdicion
 
 
   public class OperadorMultiplicacion : ExpresionOperadoresBinarios
   {
+    //atributos
+    private Nodo simboloIzquierda;
+    private Nodo simboloDerecha;
+
     public OperadorMultiplicacion(Stack<ElementoPila> pila)
       : base(pila)
     {
@@ -507,8 +614,8 @@ namespace Compiler
     public override void Muestra()
     {
       base.Muestra();
-      Nodo simboloIzquierda = hijos[0].Hijos[0].Hijos[0];
-      Nodo simboloDerecha = hijos[0].Hijos[1].Hijos[0];
+      simboloIzquierda = hijos[0].Hijos[0].Hijos[0];
+      simboloDerecha = hijos[0].Hijos[1].Hijos[0];
       sangria++;
       MuestraSangria();
       simboloIzquierda.Muestra();
@@ -516,10 +623,28 @@ namespace Compiler
       MuestraSangria();
       simboloDerecha.Muestra();
     } //fin del metodo Muestra
+
+    public override void ValidaTipos()
+    {
+      base.ValidaTipos();
+
+      if (simboloIzquierda != null)
+      {
+        simboloIzquierda.ValidaTipos();
+      }
+
+      if (simboloDerecha != null)
+      {
+        simboloDerecha.ValidaTipos();
+      }
+    } //fin del metodo ValidaTipos
   } //fin de la clase OperadorMultiplicacion
 
   public class OperadorRelacional : ExpresionOperadoresBinarios
   {
+    private Nodo simboloIzquierda;
+    private Nodo simboloDerecha;
+
     public OperadorRelacional(Stack<ElementoPila> pila)
       : base(pila)
     {
@@ -528,8 +653,8 @@ namespace Compiler
     public override void Muestra()
     {
       base.Muestra();
-      Nodo simboloIzquierda = hijos[0].Hijos[0].Hijos[0];
-      Nodo simboloDerecha = hijos[0].Hijos[1].Hijos[0];
+      simboloIzquierda = hijos[0].Hijos[0].Hijos[0];
+      simboloDerecha = hijos[0].Hijos[1].Hijos[0];
       sangria++;
       MuestraSangria();
       simboloIzquierda.Muestra();
@@ -537,6 +662,21 @@ namespace Compiler
       MuestraSangria();
       simboloDerecha.Muestra();
     } //fin del metodo Muestra
+
+    public override void ValidaTipos()
+    {
+      base.ValidaTipos();
+
+      if (simboloIzquierda != null)
+      {
+        simboloIzquierda.ValidaTipos();
+      }
+
+      if (simboloDerecha != null)
+      {
+        simboloDerecha.ValidaTipos();
+      }
+    }
   } //fin de la clase OperadorRelacional
 
   public class OperadorOr : ExpresionOperadoresBinarios
@@ -749,12 +889,15 @@ namespace Compiler
       sangria++;
       MuestraSangria();
       Console.WriteLine(simbolo);
+
       sangria++;
       MuestraSangria();
-      Console.WriteLine("<Identificador>" + identificador);
+      Console.WriteLine("<Identificador> " + identificador);
+
       sangria++;
       MuestraSangria();
       Console.WriteLine("<Asignacion> " + signoIgual);
+
       sangria++;
       MuestraSangria();
 
@@ -764,7 +907,6 @@ namespace Compiler
         sangria++;
         MuestraSangria();
         expresion.Muestra();
-        //Console.WriteLine(expresion);
       } //fin de if
 
       sangria++;
@@ -775,6 +917,13 @@ namespace Compiler
     public override void ValidaTipos()
     {
       Console.WriteLine("Valida en SentenciaAsignacion");
+
+      Variable miVariable = tablaSimbolos.ObtenerVariable(identificador);
+
+      if (miVariable == null)
+      {
+        tablaSimbolos.AgregarError("Variable indefinida: \"" + identificador + "\"");
+      } //fin de if
 
       if (expresion != null)
       {
@@ -821,7 +970,6 @@ namespace Compiler
       {
         llamadaFuncion.ValidaTipos();
       }
-
     } //fin del metodo ValidaTipos
   } //fin de la clase SentenciaLlamadaFuncion
 
@@ -870,7 +1018,7 @@ namespace Compiler
       Console.WriteLine("Valida en ValorRegresa");
       Console.WriteLine("FuncionActual: " + funcionActual);
 
-      Funcion miFuncion = (Funcion)(tablaSimbolos.BuscaIdentificador(funcionActual));
+      Funcion miFuncion = (Funcion) (tablaSimbolos.BuscaIdentificador(funcionActual));
 
       if (miFuncion != null)
       {
@@ -887,18 +1035,16 @@ namespace Compiler
 
           if (valorRetorno != tipoFuncion)
           {
-            tablaSimbolos.AgregarError("Error: Tipo de Retorno Incompatible, se esperaba: " + tipoFuncion + " Recibido: " + valorRetorno + " Funcion: \"" + miFuncion.Simbolo + "\"");
+            tablaSimbolos.AgregarError("Error: Tipo de Retorno Incompatible, se esperaba: " + tipoFuncion +
+                                       " Recibido: " + valorRetorno + " Funcion: \"" + miFuncion.Simbolo + "\"");
           }
-
         }
-
       }
 
       if (nodoSiguiente != null)
       {
         nodoSiguiente.ValidaTipos();
       }
-
     } //fin del metodo ValidaTipos
   } //fin de la clase SentenciaValorRegresa
 
@@ -1221,7 +1367,6 @@ namespace Compiler
 
     public override void ValidaTipos()
     {
-
       Console.WriteLine("Valida en BloqueFunc");
 
       if (defLocales != null)
@@ -1287,6 +1432,13 @@ namespace Compiler
         argumentos.ValidaTipos();
       } //fin de if
 
+      Funcion mifuncion = tablaSimbolos.ObtenerFuncion(identificador);
+
+      if (mifuncion != null)
+      {
+        Console.WriteLine("CUANTO: " + mifuncion.ParametrosCadena);
+      }
+
     } //fin del metodo ValidaTipos
 
   } //fin de la clase LlamadaFuncion
@@ -1315,7 +1467,7 @@ namespace Compiler
     public override void Muestra()
     {
       Console.WriteLine(simbolo);
-      //Console.WriteLine(hijos.Count); //cantidad de parametros
+      Console.WriteLine("Cantidad: " + hijos.Count); //cantidad de parametros
 
       hijos[0].Hijos[0].Muestra();
 
@@ -1390,17 +1542,16 @@ namespace Compiler
     {
       Console.WriteLine("Valida en ListaDeArgumentos2: " + listaArgumentos + " : " + expresion);
 
-      if(expresion != null)
+      if (expresion != null)
       {
         expresion.ValidaTipos();
       }
 
       if (listaArgumentos != null)
-            {
-              listaArgumentos.ValidaTipos();
-            }
-
-    }//fin del metodo ValidaTipos
+      {
+        listaArgumentos.ValidaTipos();
+      }
+    } //fin del metodo ValidaTipos
   } //fin de la clase
 
 

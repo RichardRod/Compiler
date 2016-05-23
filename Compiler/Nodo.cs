@@ -10,6 +10,7 @@ namespace Compiler
     public string simbolo;
     public Nodo nodoSiguiente;
     protected List<Nodo> hijos = new List<Nodo>();
+    public static List<Variable> listaExpresion = new List<Variable>();
 
     //atributos semantico
     public static TablaSimbolos tablaSimbolos;
@@ -71,6 +72,11 @@ namespace Compiler
       }//fin de foreach
 
     } //fin del metodo ValidaTipos
+
+    public virtual char ObtenerTipo()
+    {
+      return ' ';
+    }
 
   } //fin de la clase Nodo
 }

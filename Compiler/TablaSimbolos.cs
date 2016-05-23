@@ -52,6 +52,22 @@ namespace Compiler
       } //fin de foreach
     } //fin del metodo MuestraFunciones
 
+    public Funcion ObtenerFuncion(string simbolo)
+    {
+      Funcion miFuncion = null;
+
+      foreach (ElementoTabla elemento in tabla)
+      {
+        if (elemento.EsFuncion())
+        {
+          if(elemento.Simbolo == simbolo)
+            miFuncion = (Funcion) elemento;
+        }
+      }
+      return miFuncion;
+
+    }//fin del metodo ObtenerFuncion
+
     private void MuestraVariables()
     {
       Console.WriteLine("Variable:\t\tTipo:\t\tAmbito:");
@@ -301,14 +317,20 @@ namespace Compiler
         String parametrosCadena = "";
         if (parametros != null)
         {
+          Console.WriteLine("Entreeee: " + parametros.Hijos.Count);
           foreach (Nodo parametro in parametros.Hijos)
           {
+            Console.WriteLine("Cadena: " + parametrosCadena);
             parametrosCadena += (parametro.Hijos[0].simbolo + " "); //tipo del parametro
             parametrosCadena += parametro.Hijos[1].simbolo + " "; //identificador del parametro
           } //fin de foreach
 
-          parametrosCadena = parametrosCadena.Substring(0, parametrosCadena.Length - 2);
+          //parametrosCadena = parametrosCadena.Substring(0, parametrosCadena.Length - 2);
         } //fin de if
+        else
+        {
+          Console.WriteLine("Es nulo");
+        }
 
         return parametrosCadena;
       }

@@ -1,36 +1,36 @@
 ﻿int global;
-int global;
 
-int MiFuncion(int a, int b)
+void funcionMagica(int parUno, float parDos, int otro)
 {
-    int a, b;
+    if(miVarUno >= miVarDos)
+    {
 
-    a = b + c + d;
-    funcion(a, b);
-
-    return a;
-
+    }
 }
 
-int funcionMagica()
+int MiFuncion()
 {
-
-}
-
-int funcionMagica()
-{
-
-}
-
-void cuadrado()
-{
+    float z;
     int x;
-    return x;
+    int x;
+    float VarA;
+    int VarB, VarC;
+
+    funcionMagica();
+
+    x = VarA + VarB + VarC;
+
+    return z;
 }
 
-void vaselina()
+void funcionUno()
 {
-    int y;
-    return y;
+    int varR;
+
+    return varR;
 }
 
+int funcionUno()
+{
+
+}
