@@ -269,6 +269,8 @@ namespace Compiler
     {
       Console.WriteLine("Valida en DefFunc");
 
+      funcionActual = identificador;
+
       tipoAmbito = "Local";
       TipoDato = Tipo.DameTipo(tipo);
       NombreFuncion = identificador;
@@ -294,7 +296,6 @@ namespace Compiler
   public class NodoVariableSimple : Nodo
   {
     public NodoVariableSimple(Stack<ElementoPila> pila)
-      : base()
     {
       pila.Pop();
       simbolo = pila.Pop().Elemento;
@@ -392,7 +393,6 @@ namespace Compiler
   public class Variables2 : Nodo
   {
     public Variables2(Stack<ElementoPila> pila)
-      : base()
     {
       simbolo = "<ListaVar>";
 
@@ -795,6 +795,7 @@ namespace Compiler
 
       pila.Pop();
       puntoComa = pila.Pop().Elemento;
+
       pila.Pop();
       llamadaFuncion = pila.Pop().Nodo;
       AñadirHijo(llamadaFuncion);
@@ -813,8 +814,15 @@ namespace Compiler
 
     public override void ValidaTipos()
     {
-      Console.WriteLine("Valida en SentenciaLlamadaFuncion");
-    }
+      Console.WriteLine("Valida en SentenciaLlamadaFuncion: " + llamadaFuncion);
+
+      //buscar si la funcion ya fue definida: caso contrario marcar error
+      if (llamadaFuncion != null)
+      {
+        llamadaFuncion.ValidaTipos();
+      }
+
+    } //fin del metodo ValidaTipos
   } //fin de la clase SentenciaLlamadaFuncion
 
   public class SentenciaValorRegresa : Nodo
@@ -822,6 +830,7 @@ namespace Compiler
     //atributos
     private String retorno;
     private String puntoComa;
+    private Nodo elementoRegresa;
     //public Nodo valorRegresa;
 
     public SentenciaValorRegresa(Stack<ElementoPila> pila)
@@ -845,12 +854,13 @@ namespace Compiler
     {
       Console.WriteLine("<Regresa> " + retorno);
       //Console.WriteLine ("MAGIA: " + valorRegresa.Hijos[0].Hijos[0].Hijos[0].Hijos[0].simbolo);
-      Console.WriteLine(nodoSiguiente);
+      //Console.WriteLine(nodoSiguiente);
       if (nodoSiguiente != null)
       {
         //sig.Muestra();
         //Console.WriteLine ("vas");
-        nodoSiguiente.Hijos[0].Hijos[0].Muestra();
+        elementoRegresa = nodoSiguiente.Hijos[0].Hijos[0];
+        elementoRegresa.Muestra();
       }
       Console.WriteLine("<PuntoComa> " + puntoComa);
     } //fin del metodo Muestra
@@ -858,14 +868,38 @@ namespace Compiler
     public override void ValidaTipos()
     {
       Console.WriteLine("Valida en ValorRegresa");
+      Console.WriteLine("FuncionActual: " + funcionActual);
+
+      Funcion miFuncion = (Funcion)(tablaSimbolos.BuscaIdentificador(funcionActual));
+
+      if (miFuncion != null)
+      {
+        Console.WriteLine("Datos Funcion: " + elementoRegresa.simbolo);
+
+        Console.WriteLine("Identificador: " + miFuncion.Simbolo + " Tipo: " + miFuncion.Tipo);
+
+        Variable miVariable = (tablaSimbolos.ObtenerVariable(elementoRegresa.simbolo));
+
+        if (miVariable != null)
+        {
+          char valorRetorno = miVariable.Tipo;
+          char tipoFuncion = miFuncion.Tipo;
+
+          if (valorRetorno != tipoFuncion)
+          {
+            tablaSimbolos.AgregarError("Error: Tipo de Retorno Incompatible, se esperaba: " + tipoFuncion + " Recibido: " + valorRetorno + " Funcion: \"" + miFuncion.Simbolo + "\"");
+          }
+
+        }
+
+      }
 
       if (nodoSiguiente != null)
       {
         nodoSiguiente.ValidaTipos();
       }
 
-
-    }//fin del metodo ValidaTipos
+    } //fin del metodo ValidaTipos
   } //fin de la clase SentenciaValorRegresa
 
   public class SentenciaIf : Nodo
@@ -1187,6 +1221,7 @@ namespace Compiler
 
     public override void ValidaTipos()
     {
+
       Console.WriteLine("Valida en BloqueFunc");
 
       if (defLocales != null)
@@ -1240,7 +1275,7 @@ namespace Compiler
 
     public override void ValidaTipos()
     {
-      Console.WriteLine("Valida en LlamadaFuncion");
+      Console.WriteLine("Valida en LlamadaFuncion: ");
 
       bool existeFuncion = tablaSimbolos.FuncionDefinida(identificador);
 
@@ -1253,6 +1288,7 @@ namespace Compiler
       } //fin de if
 
     } //fin del metodo ValidaTipos
+
   } //fin de la clase LlamadaFuncion
 
   public class ListaArgumentos : Nodo
@@ -1296,7 +1332,7 @@ namespace Compiler
 
     public override void ValidaTipos()
     {
-      Console.WriteLine("Valida en ListaArgumentos");
+      Console.WriteLine("Valida en ListaArgumentos: " + listaArgumentos + " " + expresion);
 
       if (listaArgumentos != null)
       {
@@ -1352,8 +1388,19 @@ namespace Compiler
 
     public override void ValidaTipos()
     {
-      Console.WriteLine("Valida en ListaDeArgumentos2");
-    }
+      Console.WriteLine("Valida en ListaDeArgumentos2: " + listaArgumentos + " : " + expresion);
+
+      if(expresion != null)
+      {
+        expresion.ValidaTipos();
+      }
+
+      if (listaArgumentos != null)
+            {
+              listaArgumentos.ValidaTipos();
+            }
+
+    }//fin del metodo ValidaTipos
   } //fin de la clase
 
 

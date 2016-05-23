@@ -16,6 +16,7 @@ namespace Compiler
     public static string tipoAmbito = "Global";
     private char tipoDato;
     private string nombreFuncion;
+    protected static string funcionActual;
 
     public char TipoDato
     {

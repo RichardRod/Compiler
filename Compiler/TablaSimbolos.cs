@@ -104,27 +104,49 @@ namespace Compiler
       return false;
     } //fin del metodo FuncionDefinida
 
-    public void BuscaIdentificador(string simbolo)
+    public ElementoTabla BuscaIdentificador(string simbolo)
     {
-      varGlobal = null;
-      varLocal = null;
-      funcion = null;
 
       foreach (ElementoTabla elemento in tabla)
       {
-        if (elemento.Simbolo.CompareTo(simbolo) == 0)
+        if (elemento.Simbolo == simbolo)
+        {
+          if (elemento.EsFuncion())
+            return (Funcion)elemento;
+
+        }//fin de if
+
+        /*if (elemento.Simbolo.CompareTo(simbolo) == 0)
         {
           if (elemento.EsVariable())
           {
             if (elemento.EsVarLocal())
-              varLocal = (Variable) elemento;
+              return varLocal = (Variable) elemento;
             else
-              varGlobal = (Variable) elemento;
+              return varGlobal = (Variable) elemento;
           }
           else
-            funcion = (Funcion) elemento;
-        } //fin de if
+            return funcion = (Funcion) elemento;
+        } //fin de if*/
       } //fin de foreach
+
+      return null;
+    }
+
+    public Variable ObtenerVariable(string simbolo)
+    {
+      Variable miVar = null;
+
+      foreach (ElementoTabla elemento in tabla)
+      {
+        if (elemento.EsVariable()  )
+        {
+          if(elemento.Simbolo == simbolo)
+            miVar = (Variable)elemento;
+        }
+      }
+
+      return miVar;
     }
 
     public void AgregarError(String error)
@@ -154,6 +176,8 @@ namespace Compiler
       bool correcto = true;
 
       Funcion funcion = new Funcion(defFunc.TipoDato, defFunc.NombreFuncion, defFunc.GetParametros());
+
+      Console.WriteLine("Agrega Funcion: " + defFunc.GetParametros());
 
       if (FuncionDefinida(funcion.Simbolo))
       {

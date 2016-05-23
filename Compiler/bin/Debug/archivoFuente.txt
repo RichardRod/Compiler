@@ -1,11 +1,36 @@
-﻿int varGlobal;
+﻿int global;
+int global;
 
-int MiFuncion()
+int MiFuncion(int a, int b)
 {
+    int a, b;
 
-    a = asigna(x, y, z);
+    a = b + c + d;
+    funcion(a, b);
 
     return a;
 
+}
+
+int funcionMagica()
+{
+
+}
+
+int funcionMagica()
+{
+
+}
+
+void cuadrado()
+{
+    int x;
+    return x;
+}
+
+void vaselina()
+{
+    int y;
+    return y;
 }
 
