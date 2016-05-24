@@ -1,6 +1,6 @@
 ﻿int global;
 
-void funcionMagica(int parUno, float parDos, int otro)
+void funcionMagicja(int parUno, float parDos, int otro)
 {
     if(miVarUno >= miVarDos)
     {
@@ -10,10 +10,10 @@ void funcionMagica(int parUno, float parDos, int otro)
 
 int MiFuncion()
 {
-    float z;
+    int z;
     int x;
-    int x;
-    float VarA;
+
+    int VarA;
     int VarB, VarC;
 
     funcionMagica();
@@ -23,7 +23,7 @@ int MiFuncion()
     return z;
 }
 
-void funcionUno()
+int funcionUno()
 {
     int varR;
 
@@ -31,6 +31,11 @@ void funcionUno()
 }
 
 int funcionUno()
+{
+
+}
+
+int MiFuncion()
 {
 
 }
