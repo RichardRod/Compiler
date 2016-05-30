@@ -78,6 +78,11 @@ namespace Compiler
       return ' ';
     }
 
+    public virtual void GeneraCodigoEnsamblador()
+    {
+
+    }
+
   } //fin de la clase Nodo
 }
 

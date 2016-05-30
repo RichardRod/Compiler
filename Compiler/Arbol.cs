@@ -37,6 +37,11 @@ namespace Compiler
         definiciones.ValidaTipos();
       }
     } //fin del metodo ValidaTipos
+
+    public override void GeneraCodigoEnsamblador()
+    {
+      Console.WriteLine("Genera Codigo en Programa");
+    }
   } //fin de la clase Programa
 
   //R2 <Definiciones> ::= \e
@@ -1615,4 +1620,3 @@ namespace Compiler
     } //fin del metodo ValidaTipos
   } //fin de la clase DefinicionesLocales
 }
-

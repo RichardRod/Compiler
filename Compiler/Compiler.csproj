@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Arbol.cs" />
     <Compile Include="ElementoPila.cs" />
+    <Compile Include="GeneracionCodigo.cs" />
     <Compile Include="Lexico.cs" />
     <Compile Include="Nodo.cs" />
     <Compile Include="Principal.cs" />

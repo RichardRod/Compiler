@@ -9,12 +9,14 @@ namespace Compiler
     private TablaSimbolos tablaSimbolos;
     protected List<string> listaErrores;
     protected Nodo arbol;
+    private GeneracionCodigo _generacionCodigo;
 
     //constructor
     public Semantico()
     {
       listaErrores = new List<string>();
       Nodo.tablaSimbolos = tablaSimbolos = new TablaSimbolos(listaErrores);
+
     }//fin del constructor
 
     public void Analiza(Nodo arbol)
@@ -23,6 +25,7 @@ namespace Compiler
 
       this.arbol = arbol;
       arbol.ValidaTipos();
+      _generacionCodigo = new GeneracionCodigo(arbol);
 
       tablaSimbolos.Muestra();
       MuestraErrores();
@@ -43,6 +46,7 @@ namespace Compiler
       {
         Console.WriteLine("Sin errores Semanticos");
         //proceder a la generacion de codigo
+        _generacionCodigo.GenerarCodigo();
 
       } //fin de else
     } //fin del metodo MuestraErrores
