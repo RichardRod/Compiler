@@ -40,7 +40,18 @@ namespace Compiler
 
     public override void GeneraCodigoEnsamblador()
     {
-      Console.WriteLine("Genera Codigo en Programa");
+      Console.WriteLine("Genera codigo Programa");
+
+      GeneracionCodigo.AgregaArchivo("section .text");
+      GeneracionCodigo.AgregaArchivo("\t\tglobal main");
+      GeneracionCodigo.AgregaArchivo("\t\textern printf");
+      GeneracionCodigo.AgregaArchivo("main:");
+
+
+      if (definiciones != null)
+      {
+        definiciones.GeneraCodigoEnsamblador();
+      }
     }
   } //fin de la clase Programa
 
@@ -96,6 +107,21 @@ namespace Compiler
         definiciones.ValidaTipos();
       } //fin de if
     } //fin del metodo ValidaTipos
+
+    public override void GeneraCodigoEnsamblador()
+    {
+      Console.WriteLine("Genera codigo Definiciones");
+
+      if (definicion != null)
+      {
+        definicion.GeneraCodigoEnsamblador();
+      }
+
+      if (definiciones != null)
+      {
+        definiciones.GeneraCodigoEnsamblador();
+      }
+    }
   } //fin de la clase Definiciones
 
   //R4 <Definicion> ::= <DefVar>
@@ -168,6 +194,11 @@ namespace Compiler
           definicionVariable.ValidaTipos();
       } //fin de for
     } //fin del metodo Valida Tipos
+
+    public override void GeneraCodigoEnsamblador()
+    {
+      Console.WriteLine("Genera codigo DefVar");
+    }
   } //fin de la clase Variables
 
   public class DefVar : Nodo
@@ -296,6 +327,18 @@ namespace Compiler
     {
       return parametros as Parametros;
     }
+
+    public override void GeneraCodigoEnsamblador()
+    {
+      Console.WriteLine("Genera codigo DefFunc");
+
+      //parametros
+
+      if (bloqueFunc != null)
+      {
+        bloqueFunc.GeneraCodigoEnsamblador();
+      }
+    } //fin del metodo GeneraCodigoEnsamblador
   } //fin de la clase DefinicionFuncion
 
   public class NodoVariableSimple : Nodo
@@ -537,7 +580,7 @@ namespace Compiler
       {
         Variable aux = variable;
         Console.WriteLine(variable.Simbolo);
-      }//fin de foreach
+      } //fin de foreach
 
       Console.WriteLine("_____________________");
 
@@ -551,8 +594,62 @@ namespace Compiler
         }
         //Console.WriteLine(listaAuxiliar[i].Simbolo + " - " + listaExpresion[i].Simbolo);
       }
-
     } //fin del metodo Valida
+
+    public override void GeneraCodigoEnsamblador()
+    {
+      Console.WriteLine("Genera codigo ExpresionOperadoresBinarios");
+
+      switch (operador)
+      {
+        case "+":
+          GeneracionCodigo.AgregaArchivo("\t\tadd eax, ebx");
+          GeneracionCodigo.AgregaArchivo("\t\tpush eax");
+          GeneracionCodigo.AgregaArchivo("\t\tpush message");
+          GeneracionCodigo.AgregaArchivo("\t\tcall printf");
+          GeneracionCodigo.AgregaArchivo("\t\tadd esp, 8");
+          GeneracionCodigo.AgregaArchivo("\t\tret");
+          GeneracionCodigo.AgregaArchivo("");
+          GeneracionCodigo.AgregaArchivo("message db \"Resultado: %d\", 10, 0");
+          break;
+
+        case "-":
+          GeneracionCodigo.AgregaArchivo("\t\tsub eax, ebx");
+          GeneracionCodigo.AgregaArchivo("\t\tpush eax");
+          GeneracionCodigo.AgregaArchivo("\t\tpush message");
+          GeneracionCodigo.AgregaArchivo("\t\tcall printf");
+          GeneracionCodigo.AgregaArchivo("\t\tadd esp, 8");
+          GeneracionCodigo.AgregaArchivo("\t\tret");
+          GeneracionCodigo.AgregaArchivo("");
+          GeneracionCodigo.AgregaArchivo("message db \"Resultado: %d\", 10, 0");
+          break;
+
+        case "*":
+          GeneracionCodigo.AgregaArchivo("\t\tmul eax");
+          GeneracionCodigo.AgregaArchivo("\t\tpush eax");
+          GeneracionCodigo.AgregaArchivo("\t\tpush message");
+          GeneracionCodigo.AgregaArchivo("\t\tcall printf");
+          GeneracionCodigo.AgregaArchivo("\t\tadd esp, 8");
+          GeneracionCodigo.AgregaArchivo("\t\tret");
+          GeneracionCodigo.AgregaArchivo("");
+          GeneracionCodigo.AgregaArchivo("message db \"Resultado: %d\", 10, 0");
+          break;
+
+          case "/":
+          GeneracionCodigo.AgregaArchivo("\t\txor edx, edx");
+          GeneracionCodigo.AgregaArchivo("\t\tdiv ebx");
+          GeneracionCodigo.AgregaArchivo("\t\tpush edx");
+          GeneracionCodigo.AgregaArchivo("\t\tpush eax");
+          GeneracionCodigo.AgregaArchivo("\t\tpush message");
+          GeneracionCodigo.AgregaArchivo("\t\tcall printf");
+          GeneracionCodigo.AgregaArchivo("\t\tadd esp, 12");
+          GeneracionCodigo.AgregaArchivo("\t\tret");
+          GeneracionCodigo.AgregaArchivo("");
+          GeneracionCodigo.AgregaArchivo("message db \"Resultado: %d\", 10, 0");
+
+          break;
+      } //fin de switch
+    } //fin del metodo GeneracionCodigo
   } //fin de la clase ExpresionOperadoresBinarios
 
 
@@ -602,6 +699,23 @@ namespace Compiler
         simboloDerecha.ValidaTipos();
       }
     } //fin del metodo ValidaTipos
+
+    public override void GeneraCodigoEnsamblador()
+    {
+      Console.WriteLine("Genera codigo OperadorAdicion");
+
+      base.GeneraCodigoEnsamblador();
+
+      if (simboloIzquierda != null)
+      {
+        simboloIzquierda.GeneraCodigoEnsamblador();
+      }
+
+      if (simboloDerecha != null)
+      {
+        simboloDerecha.GeneraCodigoEnsamblador();
+      }
+    }
   } //fin de la clase OperadorAdicion
 
 
@@ -835,13 +949,11 @@ namespace Compiler
     public override void Muestra()
     {
       Console.WriteLine(simbolo);
-      //Console.WriteLine ("RAQUELUNO: " + sentencias);
       if (sentencias != null)
       {
         sentencias.Muestra();
       }
 
-      //Console.WriteLine ("RAQUELDOS: " + sentencia);
       if (sentencia != null)
       {
         sentencia.Muestra();
@@ -862,6 +974,21 @@ namespace Compiler
         sentencia.ValidaTipos();
       }
     }
+
+    public override void GeneraCodigoEnsamblador()
+    {
+      Console.WriteLine("Genera codigo Sentencias");
+
+      if (sentencias != null)
+      {
+        sentencias.GeneraCodigoEnsamblador();
+      }
+
+      if (sentencia != null)
+      {
+        sentencia.GeneraCodigoEnsamblador();
+      }
+    }
   } //fin de la clase Sentencias
 
   public class SentenciaAsignacion : Nodo
@@ -871,6 +998,8 @@ namespace Compiler
     String identificador;
     String signoIgual;
     String puntoComa;
+
+    private string valor;
 
     public SentenciaAsignacion(Stack<ElementoPila> pila)
     {
@@ -907,6 +1036,14 @@ namespace Compiler
       MuestraSangria();
 
       Console.WriteLine("<Expresion>");
+
+      if (expresion.Hijos[0] != null)
+      {
+        valor = expresion.Hijos[0].simbolo;
+        expresion.Hijos[0].Muestra();
+      }
+
+
       if (expresion != null)
       {
         sangria++;
@@ -935,6 +1072,27 @@ namespace Compiler
         expresion.ValidaTipos();
       }
     } //fin del metodo ValidaTipos
+
+    public override void GeneraCodigoEnsamblador()
+    {
+      Console.WriteLine("Genera codigo en sentenciaAsignacion");
+
+      if (contadorRegistro == 1)
+      {
+        GeneracionCodigo.AgregaArchivo("\t\tmov eax, " + valor);
+      }
+      else if (contadorRegistro == 2)
+      {
+        GeneracionCodigo.AgregaArchivo("\t\tmov ebx, " + valor);
+      }
+
+      contadorRegistro++;
+
+      if (expresion != null)
+      {
+        expresion.GeneraCodigoEnsamblador();
+      }
+    }
   } //fin de la clase SentenciaAsignacion
 
   public class SentenciaLlamadaFuncion : Nodo
@@ -1164,6 +1322,15 @@ namespace Compiler
         bloque.Muestra();
       }
     } //fin del metodo Muestra
+
+    public override void GeneraCodigoEnsamblador()
+    {
+      Console.WriteLine("Genera Codigo Sentencia While");
+
+
+
+
+    }
   } //fin de la clase SentenciaWhile
 
   public class Bloque : Nodo
@@ -1379,6 +1546,16 @@ namespace Compiler
         defLocales.ValidaTipos();
       }
     } //fin del metodo ValidaTipos
+
+    public override void GeneraCodigoEnsamblador()
+    {
+      Console.WriteLine("Genera Codigo BloqueFunc");
+
+      if (defLocales != null)
+      {
+        defLocales.GeneraCodigoEnsamblador();
+      }
+    }
   } //fin de la clase BloqueFuncion
 
   public class LlamadaFuncion : Nodo
@@ -1443,9 +1620,7 @@ namespace Compiler
       {
         Console.WriteLine("CUANTO: " + mifuncion.ParametrosCadena);
       }
-
     } //fin del metodo ValidaTipos
-
   } //fin de la clase LlamadaFuncion
 
   public class ListaArgumentos : Nodo
@@ -1618,5 +1793,20 @@ namespace Compiler
 
       tipoAmbito = "Global";
     } //fin del metodo ValidaTipos
+
+    public override void GeneraCodigoEnsamblador()
+    {
+      Console.WriteLine("Genera codigo DefLocales");
+
+      if (defLocal != null)
+      {
+        defLocal.GeneraCodigoEnsamblador();
+      }
+
+      if (defLocales != null)
+      {
+        defLocales.GeneraCodigoEnsamblador();
+      }
+    } //fin del metodo GeneraCodigoEnsamblador
   } //fin de la clase DefinicionesLocales
 }

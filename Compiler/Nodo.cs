@@ -19,6 +19,8 @@ namespace Compiler
     private string nombreFuncion;
     protected static string funcionActual;
 
+    protected static int contadorRegistro = 1;
+
     public char TipoDato
     {
       get { return tipoDato; }

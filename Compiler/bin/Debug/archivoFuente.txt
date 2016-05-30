@@ -1,21 +1,27 @@
-﻿int global;
-
-int MiFuncion()
+﻿void printf()
 {
-    int z;
-    int x;
 
-    int VarA;
-    int VarB, VarC;
-
-    x = VarA + VarB + VarC;
-
-    return z;
 }
 
-int funcionUno()
-{
-    int varR;
 
-    return varR;
+
+void principal()
+{
+    int a;
+    int b;
+
+    int resultado;
+
+    a = 100;
+    b = 20;
+
+    resultado = a + b;
+
+    printf("Resultado: ", resultado);
+
+    while(a < 20)
+    {
+
+    }
+
 }

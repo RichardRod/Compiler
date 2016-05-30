@@ -20,7 +20,6 @@ namespace Compiler
 
     public void Agrega(ElementoTabla elemento)
     {
-      Console.WriteLine("Agregando Elemento Tabla");
       tabla.Add(elemento);
     }
 
@@ -167,7 +166,6 @@ namespace Compiler
 
     public void AgregarError(String error)
     {
-      Console.WriteLine("Agregando Error: " + error);
       listaErrores.Add(error);
     } //fin del metodo AgregarError
 
@@ -192,8 +190,6 @@ namespace Compiler
       bool correcto = true;
 
       Funcion funcion = new Funcion(defFunc.TipoDato, defFunc.NombreFuncion, defFunc.GetParametros());
-
-      Console.WriteLine("Agrega Funcion: " + defFunc.GetParametros());
 
       if (FuncionDefinida(funcion.Simbolo))
       {
@@ -317,7 +313,6 @@ namespace Compiler
         String parametrosCadena = "";
         if (parametros != null)
         {
-          Console.WriteLine("Entreeee: " + parametros.Hijos.Count);
           foreach (Nodo parametro in parametros.Hijos)
           {
             Console.WriteLine("Cadena: " + parametrosCadena);
